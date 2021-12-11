@@ -10,6 +10,15 @@ const mongoose = require('mongoose')
 const Leaderboard = require('./models/leaderboard.js')
 const { Queries } = require('./queries')
 
+router.use(function(req, res, next) {
+  const apiKey = req.get("x-wordgravity-key")
+  if (apiKey !== null && Queries.getInstance().validateApiKey(apiKey)) {
+    next()
+  } else {
+    res.status(400).send("Error: Invalid API key")
+  }
+})
+
 /* GET /api/leaderboard. */
 router.get('/leaderboard', async function(req, res, next) {
   const leaders = await Queries.getInstance().getLeaderboard()

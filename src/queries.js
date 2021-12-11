@@ -1,3 +1,4 @@
+const ApiKey = require('./models/apikey.js')
 const Leaderboard = require('./models/leaderboard.js')
 
 class Queries {
@@ -5,6 +6,17 @@ class Queries {
     if (!Queries.instance)
       Queries.instance = new Queries()
     return Queries.instance
+  }
+
+  constructor()
+  {
+    ApiKey.findOne({}, (err, doc) => {
+      this.apiKey = doc
+    })
+  }
+
+  validateApiKey = (key) => {
+    return this.apiKey && this.apiKey.key === key
   }
 
   getLeaderboard = async () => {

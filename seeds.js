@@ -11,7 +11,8 @@ seeder.connect(process.env.MONGODB_URI, {
   useUnifiedTopology: true
 }, (res) => {
   seeder.loadModels([
-    'src/models/Leaderboard.js'
+    'src/models/Leaderboard.js',
+    'src/models/apikey.js'
   ])
 
   console.log('clearing models...')
@@ -38,6 +39,14 @@ var data = [
           { 'name': 'AAA', 'score': 500 },
           { 'name': 'AAA', 'score': 100 }
         ]
+      }
+    ]
+  },
+  {
+    'model': 'ApiKey',
+    'documents': [
+      {
+        'key': "123abc"
       }
     ]
   }
