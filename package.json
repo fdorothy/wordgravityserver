@@ -1,0 +1,39 @@
+{
+  "name": "word_gravity_server",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./app.js",
+  "engines": {
+    "node": "14.x"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "seed": "node seeds.js"
+  },
+  "dependencies": {
+    "archiver": "^5.3.0",
+    "cookie-parser": "~1.4.5",
+    "crypto": "^1.0.1",
+    "csv-builder": "^1.0.1",
+    "debug": "~4.3.2",
+    "dotenv": "^10.0.0",
+    "express": "~4.17.1",
+    "express-fileupload": "^1.2.1",
+    "express-flash": "0.0.2",
+    "express-jwt": "^6.1.0",
+    "express-openid-connect": "^2.5.0",
+    "express-session": "^1.17.2",
+    "express-ws": "^5.0.2",
+    "http-errors": "~1.8.0",
+    "jade": "~1.11.0",
+    "jszip": "^3.7.1",
+    "markdown": "^0.5.0",
+    "migrate-mongoose": "^4.0.0",
+    "moment": "^2.29.1",
+    "mongoose": "^5.13.7",
+    "mongoose-aggregate-paginate-v2": "^1.0.42",
+    "mongoose-seed": "^0.6.0",
+    "morgan": "~1.10.0",
+    "ws": "^8.2.2"
+  }
+}

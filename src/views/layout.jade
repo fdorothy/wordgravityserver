@@ -1,0 +1,23 @@
+doctype html
+
+html
+  head
+    title Word Gravity Dashboard
+    script(src="https://kit.fontawesome.com/6f2cb818aa.js" crossorigin="anonymous")
+    link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous")
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    div.container
+      header.d-flex.flex-wrap.justify-content-center.py-3.mb-4.border-bottom
+        a(href="/").d-flex.flex-wrap.align-items-center.col-mb-3.mb-md-0.me-md-auto.text-dark.text-decoration-none
+          span.fs-4 <img src="favicon-32x32.png"/> Word Gravity Dashboard
+        ul.nav.nav-pills.col-12.col-md-auto.mb-2.justify-content-center.mb-md-0
+          li.nav-item
+            a(href="/" class=title=='index'?'nav-link active':'nav-link') about
+      - if (messages.info)
+        div.alert.alert-info
+          span= messages.info(role="alert")
+      - if (messages.error)
+        div.alert.alert-danger(role="alert")
+          span= messages.error
+      block content

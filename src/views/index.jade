@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  h3 Leaderboard
+  table.table.table-striped
+    thead
+      tr
+        th Name
+        th Score
+    tbody
+      each leader, i in leaders
+        tr
+          td #{leader.name}
+          td #{leader.score}
