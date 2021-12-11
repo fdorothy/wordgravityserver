@@ -8,20 +8,19 @@ const jose = require('jose')
 const fs = require('fs')
 const mongoose = require('mongoose')
 const Leaderboard = require('./models/leaderboard.js')
+const { Queries } = require('./queries')
 
 /* GET /api/leaderboard. */
 router.get('/leaderboard', async function(req, res, next) {
-  const leaders = await Leaderboard.findOne()
-  res.json(leaders.leaders)
+  const leaders = await Queries.getInstance().getLeaderboard()
+  res.json(leaders.leaders.map(x => {
+    return {'name': x.name, 'score': x.score}
+  }))
 });
 
 router.post('/stats', async function(req, res) {
-  const leaderDoc = await Leaderboard.findOne()
-  const name = req.body.name
-  const score = req.body.score
-  const leaders = [...leaderDoc.leaders, {name, score}].sort((a, b) => b.score-a.score).slice(0, 5)
-  leaderDoc.leaders = leaders
-  await leaderDoc.save()
+  console.log(req.body)
+  await Queries.getInstance().addScore(req.body.name, req.body.score)
   res.send('ok')
 })
 
