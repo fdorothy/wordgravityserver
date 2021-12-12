@@ -22,12 +22,15 @@ router.use(function(req, res, next) {
 /* GET /api/leaderboard. */
 router.get('/leaderboard', async function(req, res, next) {
   const leaders = await Queries.getInstance().getLeaderboard()
-  res.json(leaders.leaders.map(x => {
-    return {'name': x.name, 'score': x.score}
-  }))
+  res.json({
+    highScores: leaders.leaders.map(x => {
+      return {'name': x.name, 'score': x.score}
+    })
+  })
 });
 
 router.post('/stats', async function(req, res) {
+  console.log('stats')
   console.log(req.body)
   await Queries.getInstance().addScore(req.body.name, req.body.score)
   res.send('ok')
