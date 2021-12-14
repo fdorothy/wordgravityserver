@@ -8,20 +8,40 @@ const jose = require('jose')
 const fs = require('fs')
 const mongoose = require('mongoose')
 const Leaderboard = require('./models/leaderboard.js')
+const User = require('./models/user.js')
 const { Queries } = require('./queries')
 
-router.use(function(req, res, next) {
+const queries = Queries.getInstance()
+
+router.use(async function(req, res, next) {
   const apiKey = req.get("x-wordgravity-key")
-  if (apiKey !== null && Queries.getInstance().validateApiKey(apiKey)) {
+  const user_id = req.get("x-wordgravity-user")
+  if (user_id && user_id.length > 3) {
+    req.user = await User.findById(user_id)
+  }
+  if (apiKey !== null && queries.validateApiKey(apiKey)) {
     next()
   } else {
     res.status(400).send("Error: Invalid API key")
   }
 })
 
+router.post('/register', async function(req, res) {
+  const id = await queries.register(req.body.name)
+  res.json({id})
+})
+
+router.put('/user', async function(req, res) {
+  const { name } = req.body
+  if (req.user) {
+    req.user.name = name
+    await req.user.save()
+  }
+})
+
 /* GET /api/leaderboard. */
 router.get('/leaderboard', async function(req, res, next) {
-  const leaders = await Queries.getInstance().getLeaderboard()
+  const leaders = await queries.getLeaderboard()
   res.json({
     highScores: leaders.leaders.map(x => {
       return {'name': x.name, 'score': x.score}
@@ -29,10 +49,34 @@ router.get('/leaderboard', async function(req, res, next) {
   })
 });
 
+// POST /api/stats - post a high score to the global leaderboard
 router.post('/stats', async function(req, res) {
-  console.log('stats')
-  console.log(req.body)
-  await Queries.getInstance().addScore(req.body.name, req.body.score)
+  await queries.addScore(req.user, req.body.score)
+  res.send('ok')
+})
+
+/* POST /api/challenge - creates a new challenge, returns the challenge id */
+router.post('/challenge', async function(req, res, next) {
+  const challenge = await queries.createChallenge(req.user)
+  res.json(challenge)
+})
+
+/* GET /api/challenge - gets information about a challenge */
+router.get('/challenge/:_id', async function(req, res, next) {
+  const { _id } = req.params
+  const challenge = await queries.getChallenge(_id)
+  res.json({
+    seed: challenge.seed,
+    highScores: challenge.leaders.map(x => {
+      return {'name': x.name, 'score': x.score}
+    })
+  })
+});
+
+// POST /api/challenge/_id/stats - post a high score for a specific challenge
+router.post('/challenge/:_id/stats', async function(req, res) {
+  const challenge = await queries.getChallenge(req.params._id)
+  await queries.addChallengeScore(challenge, req.user, req.body.score)
   res.send('ok')
 })
 
