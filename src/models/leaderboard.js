@@ -1,10 +1,14 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
+const UserSchema = new Schema({
+  name: String
+})
+
 const LeaderboardSchema = new Schema({
   leaders: [
     {
-      name: String,
+      user: UserSchema,
       score: Number
     }
   ]

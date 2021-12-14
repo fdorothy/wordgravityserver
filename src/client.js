@@ -27,8 +27,7 @@ router.use(async function(req, res, next) {
 })
 
 router.post('/register', async function(req, res) {
-  const id = await queries.register(req.body.name)
-  res.json({id})
+  res.json(await queries.register(req.body.name))
 })
 
 router.put('/user', async function(req, res) {
@@ -42,17 +41,13 @@ router.put('/user', async function(req, res) {
 /* GET /api/leaderboard. */
 router.get('/leaderboard', async function(req, res, next) {
   const leaders = await queries.getLeaderboard()
-  res.json({
-    highScores: leaders.leaders.map(x => {
-      return {'name': x.name, 'score': x.score}
-    })
-  })
+  res.json(leaders)
 });
 
 // POST /api/stats - post a high score to the global leaderboard
 router.post('/stats', async function(req, res) {
-  await queries.addScore(req.user, req.body.score)
-  res.send('ok')
+  const leaders = await queries.addScore(req.user, req.body.score)
+  res.json(leaders)
 })
 
 /* POST /api/challenge - creates a new challenge, returns the challenge id */
@@ -65,19 +60,14 @@ router.post('/challenge', async function(req, res, next) {
 router.get('/challenge/:_id', async function(req, res, next) {
   const { _id } = req.params
   const challenge = await queries.getChallenge(_id)
-  res.json({
-    seed: challenge.seed,
-    highScores: challenge.leaders.map(x => {
-      return {'name': x.name, 'score': x.score}
-    })
-  })
+  res.json(challenge)
 });
 
 // POST /api/challenge/_id/stats - post a high score for a specific challenge
 router.post('/challenge/:_id/stats', async function(req, res) {
-  const challenge = await queries.getChallenge(req.params._id)
-  await queries.addChallengeScore(challenge, req.user, req.body.score)
-  res.send('ok')
+  let challenge = await queries.getChallenge(req.params._id)
+  challenge = await queries.addChallengeScore(challenge, req.user, req.body.score)
+  res.json(challenge)
 })
 
 // catch 404 and forward to error handler

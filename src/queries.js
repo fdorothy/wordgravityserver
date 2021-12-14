@@ -19,8 +19,8 @@ class Queries {
 
   register = async (name) => {
     const user = new User({name})
-    let obj = await user.save()
-    return obj._id
+    await user.save()
+    return user
   }
 
   validateApiKey = (key) => {
@@ -51,6 +51,7 @@ class Queries {
     const leaders = this.addScoreToLeaders(leaderDoc.leaders, user, score)
     leaderDoc.leaders = leaders
     await leaderDoc.save()
+    return leaderDoc
   }
 
   addChallengeScore = async (challenge, user, score) => {
