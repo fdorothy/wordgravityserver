@@ -13,8 +13,9 @@ const { Queries } = require('./queries')
 /* GET home page. */
 router.get('/', async function(req, res, next) {
   const leaders = await Queries.getInstance().getLeaderboard()
-  console.log(leaders)
-  res.render('index', { title: 'index', leaders: leaders.leaders })
+  const daily = await Queries.getInstance().getDailyChallenge()
+  const dailyRolloverTime = Queries.getInstance().dailyChallengeRolloverTime()
+  res.render('index', { title: 'index', leaders: leaders.leaders, daily, dailyRolloverTime })
 });
 
 module.exports = router;

@@ -43,7 +43,40 @@ class Queries {
   }
 
   getChallenge = async (challenge_id) => {
-    return await Challenge.findById(challenge_id)
+    if (challenge_id === 'daily')
+      return await Challenge.findOne({daily: true})
+    else
+      return await Challenge.findById(challenge_id)
+  }
+
+  getDailyChallenge = async () => {
+    const challenge = await Challenge.findOne({daily: true})
+    return challenge
+  }
+
+  createDailyChallenge = async () => {
+    const challenge = new Challenge({daily: true, seed: this.randomSeed()})
+    await challenge.save()
+    return challenge
+  }
+
+  rolloverDailyChallenge = async () => {
+    Challenge.deleteMany({daily: true})
+    this.createDailyChallenge()
+    setTimeout(this.setDailyChallengeTimer, 60)
+  }
+
+  setDailyChallengeTimer = async () => {
+    const date = this.dailyChallengeRolloverTime()
+    setTimeout(() => {
+      this.rolloverDailyChallenge()
+    }, date - Date.now())
+  }
+
+  dailyChallengeRolloverTime = () => {
+    const date = new Date()
+    date.setUTCHours(23,59,59,999)
+    return date
   }
 
   addScore = async (user, score) => {
@@ -67,5 +100,14 @@ class Queries {
 
   randomSeed = () => Math.floor(Math.random() * 4096 + 1)
 }
+
+async function dailySetup() {
+  const q = Queries.getInstance()
+  const daily = await q.getDailyChallenge()
+  if (!daily)
+    q.createDailyChallenge()
+  q.setDailyChallengeTimer()
+}
+dailySetup()
 
 module.exports = { Queries }

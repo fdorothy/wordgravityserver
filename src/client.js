@@ -59,7 +59,7 @@ router.post('/challenge', async function(req, res, next) {
 /* GET /api/challenge - gets information about a challenge */
 router.get('/challenge/:_id', async function(req, res, next) {
   const { _id } = req.params
-  const challenge = await queries.getChallenge(_id)
+  challenge = await queries.getChallenge(_id)
   res.json(challenge)
 });
 
