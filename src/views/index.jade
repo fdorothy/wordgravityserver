@@ -10,5 +10,6 @@ block content
     tbody
       each leader, i in leaders
         tr
-          td #{leader.name}
-          td #{leader.score}
+          if leader.user
+            td #{leader.user.name}
+            td #{leader.score}
