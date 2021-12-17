@@ -30,7 +30,7 @@ router.post('/register', async function(req, res) {
   res.json(await queries.register(req.body.name))
 })
 
-router.put('/user', async function(req, res) {
+router.post('/user', async function(req, res) {
   const { name } = req.body
   if (req.user) {
     req.user.name = name
