@@ -52,7 +52,7 @@ router.post('/stats', async function(req, res) {
 
 /* POST /api/challenge - creates a new challenge, returns the challenge id */
 router.post('/challenge', async function(req, res, next) {
-  const challenge = await queries.createChallenge(req.user)
+  const challenge = await queries.createChallenge(req.user, req.body.seed)
   res.json(challenge)
 })
 

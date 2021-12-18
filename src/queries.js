@@ -27,8 +27,8 @@ class Queries {
     return this.apiKey && this.apiKey.key === key
   }
 
-  createChallenge = async (user) => {
-    const challenge = new Challenge({owner: user, seed: this.randomSeed()})
+  createChallenge = async (user, seed) => {
+    const challenge = new Challenge({owner: user, seed})
     await challenge.save()
     return challenge
   }
