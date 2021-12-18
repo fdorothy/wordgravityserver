@@ -49,6 +49,11 @@ class Queries {
       return await Challenge.findById(challenge_id)
   }
 
+  getChallenges = async (user_id) => {
+    const challenges = await Challenge.find({'owner._id': user_id})
+    return challenges
+  }
+
   getDailyChallenge = async () => {
     const challenge = await Challenge.findOne({daily: true})
     return challenge

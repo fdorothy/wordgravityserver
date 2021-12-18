@@ -63,6 +63,12 @@ router.get('/challenge/:_id', async function(req, res, next) {
   res.json(challenge)
 });
 
+/* GET /api/challenge - gets information about a challenge */
+router.get('/challenges', async function(req, res, next) {
+  const challenges = await queries.getChallenges(req.user._id)
+  res.json({challenges})
+});
+
 // POST /api/challenge/_id/stats - post a high score for a specific challenge
 router.post('/challenge/:_id/stats', async function(req, res) {
   let challenge = await queries.getChallenge(req.params._id)
