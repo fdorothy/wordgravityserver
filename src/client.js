@@ -34,7 +34,8 @@ router.post('/user', async function(req, res) {
   const { name } = req.body
   if (req.user) {
     req.user.name = name
-    await req.user.save()
+    const user = await req.user.save()
+    res.json(user)
   }
 })
 
@@ -81,6 +82,12 @@ router.post('/challenge/:_id/stats', async function(req, res) {
 // POST /api/challenge/_id/stats - post a high score for a specific challenge
 router.post('/challenge/:_id/accept', async function(req, res) {
   challenge = await queries.acceptChallenge(req.params._id, req.user)
+  res.json(challenge)
+})
+
+// POST /api/challenge/_id/stats - post a high score for a specific challenge
+router.post('/challenge/:_id/destroy', async function(req, res) {
+  challenge = await queries.destroyChallenge(req.params._id, req.user)
   res.json(challenge)
 })
 

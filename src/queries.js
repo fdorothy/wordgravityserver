@@ -83,6 +83,26 @@ class Queries {
     }
   }
 
+  destroyChallenge = async (challenge_id, user) => {
+    const challenge = await this.getChallenge(challenge_id)
+    const playerIndex = challenge.players.findIndex(x => x._id.toString() == user._id.toString())
+    if (playerIndex < 0) {
+      // no player found, just ignore
+      console.log('no player found')
+    } else {
+      console.log('found the player')
+      challenge.players.splice(playerIndex, 1)
+
+      // if we were the last player, then delete the challenge
+      if (challenge.players.length == 0) {
+        await Challenge.deleteOne({_id: challenge_id})
+      } else {
+        console.log('saving')
+        await challenge.save()
+      }
+    }
+  }
+
   addChallengeScore = async (challenge, user, score) => {
     const index = challenge.players.findIndex(x => x._id.toString() == user._id.toString())
     const player = challenge.players[index]
