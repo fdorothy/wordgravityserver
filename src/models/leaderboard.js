@@ -6,12 +6,14 @@ const UserSchema = new Schema({
 })
 
 const LeaderboardSchema = new Schema({
+  _id: String,
   leaders: [
     {
       user: UserSchema,
       score: Number
     }
-  ]
+  ],
+  seed: Number
 }, {timestamps: true})
 
 module.exports = mongoose.model('Leaderboard', LeaderboardSchema)

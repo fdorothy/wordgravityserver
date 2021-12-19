@@ -38,20 +38,22 @@ router.post('/user', async function(req, res) {
   }
 })
 
-/* GET /api/leaderboard. */
-router.get('/leaderboard', async function(req, res, next) {
-  const leaders = await queries.getLeaderboard()
+/* GET /api/leaderboard/_id. */
+router.get('/leaderboard/:_id', async function(req, res, next) {
+  const leaders = await queries.getLeaderboard(req.params._id)
   res.json(leaders)
 });
 
-// POST /api/stats - post a high score to the global leaderboard
-router.post('/stats', async function(req, res) {
-  const leaders = await queries.addScore(req.user, req.body.score)
+// POST /api/stats - post a high score to a leaderboard
+router.post('/leaderboard/:_id/stats', async function(req, res) {
+  console.log('posting stats')
+  const leaders = await queries.addScoreToLeaderboard(req.user, req.params._id, req.body.score)
   res.json(leaders)
 })
 
 /* POST /api/challenge - creates a new challenge, returns the challenge id */
 router.post('/challenge', async function(req, res, next) {
+  console.log(req.user)
   const challenge = await queries.createChallenge(req.user, req.body.seed)
   res.json(challenge)
 })
@@ -76,9 +78,15 @@ router.post('/challenge/:_id/stats', async function(req, res) {
   res.json(challenge)
 })
 
+// POST /api/challenge/_id/stats - post a high score for a specific challenge
+router.post('/challenge/:_id/accept', async function(req, res) {
+  challenge = await queries.acceptChallenge(req.params._id, req.user)
+  res.json(challenge)
+})
+
 // catch 404 and forward to error handler
 router.use(function(req, res, next) {
-  next(createError(404));
+  next();
 });
 
 // error handler

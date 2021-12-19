@@ -12,10 +12,10 @@ const { Queries } = require('./queries')
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {
-  const leaders = await Queries.getInstance().getLeaderboard()
-  const daily = await Queries.getInstance().getDailyChallenge()
-  const dailyRolloverTime = Queries.getInstance().dailyChallengeRolloverTime()
-  res.render('index', { title: 'index', leaders: leaders.leaders, daily, dailyRolloverTime })
+  const globalLeaderboard = await Queries.getInstance().getGlobalLeaderboard()
+  const dailyLeaderboard = await Queries.getInstance().getDailyLeaderboard()
+  const dailyRolloverTime = Queries.getInstance().dailyLeaderboardRolloverTime()
+  res.render('index', { title: 'index', globalLeaderboard, dailyLeaderboard, dailyRolloverTime })
 });
 
 module.exports = router;

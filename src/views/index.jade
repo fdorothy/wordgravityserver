@@ -8,13 +8,13 @@ block content
         th Name
         th Score
     tbody
-      each leader, i in leaders
+      each leader, i in globalLeaderboard.leaders
         tr
           if leader.user
             td #{leader.user.name}
             td #{leader.score}
   h3 Daily Challenge
-  p seed: #{daily.seed}
+  p seed: #{dailyLeaderboard.seed}
   p rollover at: #{dailyRolloverTime}
   table.table.table-striped
     thead
@@ -22,7 +22,7 @@ block content
         th Name
         th Score
     tbody
-      each leader, i in daily.leaders
+      each leader, i in dailyLeaderboard.leaders
         tr
           if leader.user
             td #{leader.user.name}
