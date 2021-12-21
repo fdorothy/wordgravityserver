@@ -18,4 +18,11 @@ router.get('/', async function(req, res, next) {
   res.render('index', { title: 'index', globalLeaderboard, dailyLeaderboard, dailyRolloverTime })
 });
 
+router.get('/challenge', async function(req, res, next) {
+  const challenge_id = req.query.challenge_id
+  const challenge = Queries.getInstance().getChallenge(challenge_id)
+  const challenge_url = "wordgravity://challenge?" + challenge_id
+  res.render('challenge', { title: 'challenge', challenge, challenge_url})
+})
+
 module.exports = router;
