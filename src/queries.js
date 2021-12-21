@@ -62,13 +62,16 @@ class Queries {
     return date
   }
 
-  createChallenge = async (user, seed) => {
-    const challenge = new Challenge({players: [user], seed})
+  createChallenge = async (user, seed, random) => {
+    const challenge = new Challenge({players: [user], seed, random})
     await challenge.save()
     return challenge
   }
 
   getChallenge = async (challenge_id) => await Challenge.findById(challenge_id)
+
+  getRandomChallenge = async (challenge_id) => await Challenge.findOne({random: true})
+
   getChallenges = async (user_id) => {
     const challenges = await Challenge.find({'players._id': user_id})
     return challenges
@@ -77,10 +80,10 @@ class Queries {
   acceptChallenge = async (challenge_id, user) => {
     const challenge = await this.getChallenge(challenge_id)
     const player = challenge.players.find(x => x._id.toString() == user._id.toString())
-    if (!player) {
+    challenge.random = false
+    if (!player)
       challenge.players.push({_id: user._id, name: user.name})
-      await challenge.save()
-    }
+    await challenge.save()
   }
 
   destroyChallenge = async (challenge_id, user) => {

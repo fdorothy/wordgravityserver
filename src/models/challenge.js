@@ -12,7 +12,8 @@ const PlayerSchema = new Schema({
 const ChallengeSchema = new Schema({
   players: [PlayerSchema], // each user in the challenge, can be more than just 2!
   turn: {type: Number, default: 0}, // index into players[] whose current turn it is
-  seed: Number // seed for current challenge
+  seed: Number, // seed for current challenge
+  random: false
 }, {timestamps: true})
 
 module.exports = mongoose.model('Challenge', ChallengeSchema)

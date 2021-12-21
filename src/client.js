@@ -55,7 +55,13 @@ router.post('/leaderboard/:_id/stats', async function(req, res) {
 /* POST /api/challenge - creates a new challenge, returns the challenge id */
 router.post('/challenge', async function(req, res, next) {
   console.log(req.user)
-  const challenge = await queries.createChallenge(req.user, req.body.seed)
+  const challenge = await queries.createChallenge(req.user, req.body.seed, req.body.random)
+  res.json(challenge)
+})
+
+/* GET /api/challenge/random - gets a random challenge without a partner */
+router.get('/challenge/random', async function(req, res, next) {
+  const challenge = await queries.getRandomChallenge()
   res.json(challenge)
 })
 
