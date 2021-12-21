@@ -117,7 +117,7 @@ class Queries {
       //  if we have more than one person since we assume that
       //  the game isn't ready until we have a minimum of 2 players
       if (challenge.turn >= challenge.players.length && challenge.players.length > 1)
-        finalizeChallenge(challenge)
+        this.finalizeChallenge(challenge)
 
       await challenge.save()
       return challenge
