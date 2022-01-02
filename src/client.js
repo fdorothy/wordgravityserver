@@ -81,7 +81,7 @@ router.get('/challenges', async function(req, res, next) {
 // POST /api/challenge/_id/stats - post a high score for a specific challenge
 router.post('/challenge/:_id/stats', async function(req, res) {
   let challenge = await queries.getChallenge(req.params._id)
-  challenge = await queries.addChallengeScore(challenge, req.user, req.body.score)
+  challenge = await queries.addChallengeScore(challenge, req.user, req.body.score, req.body.power || 0)
   res.json(challenge)
 })
 

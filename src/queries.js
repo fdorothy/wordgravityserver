@@ -106,7 +106,8 @@ class Queries {
     }
   }
 
-  addChallengeScore = async (challenge, user, score) => {
+  addChallengeScore = async (challenge, user, score, power) => {
+    challenge.power = power
     const index = challenge.players.findIndex(x => x._id.toString() == user._id.toString())
     const player = challenge.players[index]
     console.log(JSON.stringify(challenge.players))
