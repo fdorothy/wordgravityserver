@@ -115,6 +115,7 @@ class Queries {
     console.log(player)
     if (player && challenge.turn == index) {
       player.score = score
+      challenge.leaders = this.addScoreToLeaders(challenge.leaders, user, score)
       challenge.turn += 1
 
       // check if this is the end of the game, but only proceed
