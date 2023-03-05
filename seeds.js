@@ -11,12 +11,14 @@ seeder.connect(process.env.MONGODB_URI, {
   useUnifiedTopology: true
 }, (res) => {
   seeder.loadModels([
-    'src/models/Leaderboard.js',
-    'src/models/apikey.js'
+    'src/models/leaderboard.js',
+    'src/models/challenge.js',
+    'src/models/apikey.js',
+    'src/models/user.js'
   ])
 
   console.log('clearing models...')
-  seeder.clearModels(['Leaderboard'], function() {
+  seeder.clearModels(['Leaderboard', 'Challenge', 'ApiKey', 'User'], function() {
     console.log('models cleared, populating...')
     seeder.populateModels(data, function() {
       console.log('models populated, disconnecting')
@@ -49,6 +51,14 @@ var data = [
         'key': "123abc"
       }
     ]
+  },
+  {
+    'model': 'User',
+    'documents': []
+  },
+  {
+    'model': 'Challenge',
+    'documents': []
   }
 ]
  

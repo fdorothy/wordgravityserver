@@ -14,87 +14,151 @@ const { Queries } = require('./queries')
 const queries = Queries.getInstance()
 
 router.use(async function(req, res, next) {
-  const apiKey = req.get("x-wordgravity-key")
-  const user_id = req.get("x-wordgravity-user")
-  if (user_id && user_id.length > 3) {
-    req.user = await User.findById(user_id)
-  }
-  if (apiKey !== null && queries.validateApiKey(apiKey)) {
-    next()
-  } else {
-    res.status(400).send("Error: Invalid API key")
+  try {
+    console.log(req.method + " " + req.originalUrl)
+    const apiKey = req.get("x-wordgravity-key")
+    const user_id = req.get("x-wordgravity-user")
+    if (user_id) {
+      req.user = await User.findById(user_id)
+      console.log(req.user)
+    }
+    if (apiKey !== null && queries.validateApiKey(apiKey)) {
+      next()
+    } else {
+      res.status(400).send("Error: Invalid API key")
+    }
+  } catch(err) {
+    console.log(err)
+    res.status(400).send({err: 'something went wrong'})
   }
 })
 
 router.post('/register', async function(req, res) {
-  res.json(await queries.register(req.body.name))
+  try {
+    res.json(await queries.register(req.body.name))
+  } catch(err) {
+    console.log(err)
+    res.status(400).send({err: 'something went wrong'})
+  }
 })
 
 router.post('/user', async function(req, res) {
   const { name } = req.body
   if (req.user) {
-    req.user.name = name
-    const user = await req.user.save()
-    res.json(user)
+    try {
+      req.user.name = name
+      const user = await req.user.save()
+      res.json(user)
+    } catch (err) {
+      console.log(err)
+      res.status(400).send({err: 'something went wrong'})
+    }
+  } else {
+    res.status(400).send({err: 'unknown user'})
   }
 })
 
 /* GET /api/leaderboard/_id. */
 router.get('/leaderboard/:_id', async function(req, res, next) {
-  const leaders = await queries.getLeaderboard(req.params._id)
-  res.json(leaders)
+  try {
+    const leaders = await queries.getLeaderboard(req.params._id)
+    res.json(leaders)
+  } catch (err) {
+    console.log(err)
+    res.status(400).send({err: 'something went wrong'})
+  }
 });
 
 // POST /api/stats - post a high score to a leaderboard
 router.post('/leaderboard/:_id/stats', async function(req, res) {
-  console.log('posting stats')
-  const leaders = await queries.addScoreToLeaderboard(req.user, req.params._id, req.body.score)
-  res.json(leaders)
+  try {
+    console.log('posting stats')
+    const leaders = await queries.addScoreToLeaderboard(req.user, req.params._id, req.body.score)
+    res.json(leaders)
+  } catch (err) {
+    console.log(err)
+    res.status(400).send({err: 'something went wrong'})
+  }
 })
 
 /* POST /api/challenge - creates a new challenge, returns the challenge id */
 router.post('/challenge', async function(req, res, next) {
-  console.log(req.user)
-  const challenge = await queries.createChallenge(req.user, req.body.seed, req.body.random)
-  res.json(challenge)
+  try {
+    console.log(req.user)
+    const challenge = await queries.createChallenge(req.user, req.body.seed, req.body.random, req.body.power || 0)
+    res.json(challenge)
+  } catch(err) {
+    console.log(err)
+    res.status(400).send({err: 'something went wrong'})
+  }
 })
 
 /* GET /api/challenge/random - gets a random challenge without a partner */
 router.get('/challenge/random', async function(req, res, next) {
-  const challenge = await queries.getRandomChallenge()
-  res.json(challenge)
+  try {
+    const challenge = await queries.getRandomChallenge()
+    res.json(challenge)
+  } catch (err) {
+    console.log(err)
+    res.status(400).send({err: 'something went wrong'})
+  }
 })
 
 /* GET /api/challenge - gets information about a challenge */
 router.get('/challenge/:_id', async function(req, res, next) {
-  const { _id } = req.params
-  challenge = await queries.getChallenge(_id)
-  res.json(challenge)
+  try {
+    const { _id } = req.params
+    challenge = await queries.getChallenge(_id)
+    res.json(challenge)
+  } catch (err) {
+    console.log(err)
+    res.status(400).send({err: 'something went wrong'})
+  }
 });
 
 /* GET /api/challenge - gets information about a challenge */
 router.get('/challenges', async function(req, res, next) {
-  const challenges = await queries.getChallenges(req.user._id)
-  res.json({challenges})
+  try {
+    const challenges = await queries.getChallenges(req.user._id)
+    res.json({challenges})
+  } catch (err) {
+    console.log(err)
+    res.status(400).send({err: 'something went wrong'})
+  }
 });
 
 // POST /api/challenge/_id/stats - post a high score for a specific challenge
 router.post('/challenge/:_id/stats', async function(req, res) {
-  let challenge = await queries.getChallenge(req.params._id)
-  challenge = await queries.addChallengeScore(challenge, req.user, req.body.score, req.body.power || 0)
-  res.json(challenge)
+  try {
+    let challenge = await queries.getChallenge(req.params._id)
+    challenge = await queries.addChallengeScore(challenge, req.user, req.body.score, req.body.power || 0)
+    res.json(challenge)
+  } catch (err) {
+    console.log(err)
+    res.status(400).send({err: 'something went wrong'})
+  }
 })
 
 // POST /api/challenge/_id/stats - post a high score for a specific challenge
 router.post('/challenge/:_id/accept', async function(req, res) {
-  challenge = await queries.acceptChallenge(req.params._id, req.user)
-  res.json(challenge)
+  try {
+    challenge = await queries.acceptChallenge(req.params._id, req.user)
+    res.json(challenge)
+  } catch(err) {
+    console.log(err)
+    res.status(400).send({err: 'something went wrong'})
+  }
 })
 
 // POST /api/challenge/_id/stats - post a high score for a specific challenge
 router.post('/challenge/:_id/destroy', async function(req, res) {
-  challenge = await queries.destroyChallenge(req.params._id, req.user)
-  res.json(challenge)
+  try {
+    challenge = await queries.destroyChallenge(req.params._id, req.user)
+    res.json(challenge)
+  } catch (err) {
+    console.log(err)
+    res.status(400).send({err: 'something went wrong'})
+  }
 })
 
 // catch 404 and forward to error handler
