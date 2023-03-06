@@ -44,7 +44,7 @@ class Queries {
   }
 
   rolloverDailyLeaderboard = async () => {
-    await Leaderboard.deleteMany({daily: true})
+    await Leaderboard.deleteMany({_id: 'daily'})
     this.createDailyLeaderboard()
     setTimeout(this.setDailyLeaderboardTimer, 60)
   }

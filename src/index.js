@@ -19,7 +19,9 @@ router.get('/', async function(req, res, next) {
 });
 
 router.get('/challenge', async function(req, res, next) {
-  const challenge_id = req.query.challenge_id
+  console.log(req.originalUrl)
+  console.log(req.originalUrl.split('?'))
+  const challenge_id = req.originalUrl.split('?')[1]
   const challenge = Queries.getInstance().getChallenge(challenge_id)
   const challenge_url = "wordgravity://challenge?" + challenge_id
   res.render('challenge', { title: 'challenge', challenge, challenge_url})
