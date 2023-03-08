@@ -181,7 +181,7 @@ async function dailySetup() {
     console.log(err)
   }
 }
-dailySetup()
+//dailySetup()
 
 async function globalSetup() {
   const q = Queries.getInstance()
@@ -189,6 +189,6 @@ async function globalSetup() {
   if (!leaderboard)
     q.createGlobalLeaderboard()
 }
-globalSetup()
+//globalSetup()
 
 module.exports = { Queries }
