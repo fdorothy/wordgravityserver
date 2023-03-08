@@ -15,6 +15,11 @@ const expressWs = require('express-ws')(app,server)
 var indexRouter = require('./index');
 var clientRouter = require('./client');
 
+// set up a last resort error logger
+process.on('uncaughtException', function (exception) {
+  console.log(exception); // to see your exception details in the console
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
