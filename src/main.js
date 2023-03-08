@@ -24,6 +24,10 @@ process.on('unhandledRejection', (reason, p) => {
     console.log("Unhandled Rejection at: Promise ", p, " reason: ", reason);
 });
 
+process.on('exit', (code) => {
+  console.log(`About to exit with code: ${code}`);
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
