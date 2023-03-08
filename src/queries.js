@@ -164,7 +164,7 @@ class Queries {
   }
 
   addScoreToLeaders = (leaders, user, score) => {
-    return [...leaders, {user, score}].sort((a, b) => b.score-a.score).slice(0, 5)
+    return [...leaders, {user, score}].sort((a, b) => b.score-a.score).slice(0, 10)
   }
 
   randomSeed = () => Math.floor(Math.random() * 4096 + 1)
