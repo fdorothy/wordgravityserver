@@ -20,6 +20,10 @@ process.on('uncaughtException', function (exception) {
   console.log(exception); // to see your exception details in the console
 });
 
+process.on('unhandledRejection', (reason, p) => {
+    console.log("Unhandled Rejection at: Promise ", p, " reason: ", reason);
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
