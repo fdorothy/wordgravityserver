@@ -45,7 +45,7 @@ class Queries {
 
   rolloverDailyLeaderboard = async () => {
     await Leaderboard.deleteMany({_id: 'daily'})
-    this.createDailyLeaderboard()
+    await this.createDailyLeaderboard()
     setTimeout(this.setDailyLeaderboardTimer, 60)
   }
 
@@ -171,11 +171,15 @@ class Queries {
 }
 
 async function dailySetup() {
-  const q = Queries.getInstance()
-  const daily = await q.getDailyLeaderboard()
-  if (!daily)
-    q.createDailyLeaderboard()
-  q.setDailyLeaderboardTimer()
+  try {
+    const q = Queries.getInstance()
+    const daily = await q.getDailyLeaderboard()
+    if (!daily)
+      await q.createDailyLeaderboard()
+    await q.setDailyLeaderboardTimer()
+  } catch (err) {
+    console.log(err)
+  }
 }
 dailySetup()
 
