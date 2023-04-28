@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  h3 Overall Leaderboard
+  h3 Leaderboard
   table.table.table-striped
     thead
       tr
@@ -13,7 +13,7 @@ block content
           if leader.user
             td #{leader.user.name}
             td #{leader.score}
-  h3 Daily Challenge
+  h3 Daily Challenge Leaderboard
   p seed: #{dailyLeaderboard.seed}
   p rollover at: #{dailyRolloverTime}
   table.table.table-striped

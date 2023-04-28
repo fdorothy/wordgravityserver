@@ -1,0 +1,11 @@
+body {
+    background-image: url('../StarFieldInvert.jpg');
+}
+
+.table {
+    background-color: rgb(255, 255, 255);
+}
+
+div.challenge {
+    background-color: rgb(255, 255, 255);
+}
