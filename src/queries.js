@@ -153,6 +153,7 @@ class Queries {
 
     // reset the turn back to 0
     challenge.turn = 0
+    challenge.seed = this.randomSeed()
   }
 
   addScoreToLeaderboard = async (user, leaderboard_id, score) => {
